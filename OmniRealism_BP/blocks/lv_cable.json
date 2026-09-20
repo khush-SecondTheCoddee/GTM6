@@ -1,0 +1,15 @@
+{
+  "format_version": "1.21.0",
+  "minecraft:block": {
+    "description": { "identifier": "omni:lv_cable", "menu_category": { "category": "construction", "group": "itemGroup.name.misc" } },
+    "components": {
+      "minecraft:destroy_time": 0.7,
+      "minecraft:explosion_resistance": 1.0,
+      "minecraft:selection_box": { "origin": [-3, -3, -3], "size": [6, 6, 6] },
+      "minecraft:collision_box": { "origin": [-3, -3, -3], "size": [6, 6, 6] },
+      "minecraft:map_color": "#b77920",
+      "minecraft:loot": "loot_tables/blocks/lv_cable.json",
+      "minecraft:custom_components": ["omni:conductor"]
+    }
+  }
+}

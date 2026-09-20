@@ -1,0 +1,6 @@
+tile.omni:coal_turbine.name=Coal Turbine
+tile.omni:transformer_substation.name=Transformer Substation
+tile.omni:hv_cable.name=High-Voltage Cable
+tile.omni:lv_cable.name=Low-Voltage Cable
+tile.omni:support_beam.name=Support Beam
+itemGroup.name.misc=OmniRealism

@@ -1,0 +1,8 @@
+{
+  "format_version": [1, 1, 0],
+  "omni:coal_turbine": { "sound": "metal", "textures": "coal_block", "carried_textures": "coal_block" },
+  "omni:transformer_substation": { "sound": "metal", "textures": "iron_block", "carried_textures": "iron_block" },
+  "omni:hv_cable": { "sound": "metal", "textures": "black_concrete", "carried_textures": "black_concrete" },
+  "omni:lv_cable": { "sound": "metal", "textures": "orange_concrete", "carried_textures": "orange_concrete" },
+  "omni:support_beam": { "sound": "wood", "textures": "dark_oak_planks", "carried_textures": "dark_oak_planks" }
+}
