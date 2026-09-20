@@ -1,0 +1,16 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "OmniRealism Resources",
+    "description": "Resources for OmniRealism industrial blocks.",
+    "uuid": "c102298f-f40f-4917-8376-276cd626a676",
+    "version": [1, 0, 0],
+    "min_engine_version": [1, 21, 0]
+  },
+  "modules": [
+    { "type": "resources", "uuid": "dea0ba1c-09a1-4482-ad7c-d9bb58cac355", "version": [1, 0, 0] }
+  ],
+  "dependencies": [
+    { "uuid": "1a4523e8-d049-4cc3-ad5c-cb70dbe8744d", "version": [1, 0, 0] }
+  ]
+}
