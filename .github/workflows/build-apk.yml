@@ -1,0 +1,49 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: gradle
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+      - name: Set up Rust stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android,armv7-linux-androideabi,x86_64-linux-android
+      - name: Install cargo-ndk
+        run: cargo install cargo-ndk --version 3.5.4 --locked
+      - name: Set up Android SDK and NDK
+        uses: android-actions/setup-android@v3
+      - name: Install Android NDK 26
+        run: sdkmanager "platforms;android-35" "build-tools;35.0.0" "ndk;26.3.11579264"
+      - name: Cross-compile Rust engine
+        env:
+          ANDROID_NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/26.3.11579264
+        run: |
+          rm -rf app/src/main/jniLibs
+          cargo ndk --manifest-path core-engine/Cargo.toml --platform 26 --target arm64-v8a --target armeabi-v7a --target x86_64 --output-dir app/src/main/jniLibs build --release
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --stacktrace
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: nextgen-editor-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error

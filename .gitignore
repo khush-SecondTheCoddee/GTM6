@@ -1,0 +1,9 @@
+.gradle/
+**/build/
+target/
+app/src/main/jniLibs/
+.idea/
+local.properties
+# Wrapper JARs are intentionally not versioned: this repository's portable
+# gradlew launcher delegates to the Gradle installed by CI or the developer.
+gradle/wrapper/*.jar
