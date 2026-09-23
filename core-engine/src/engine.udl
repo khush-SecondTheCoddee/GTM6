@@ -1,0 +1,9 @@
+// Documentation contract for a future generated UniFFI bridge.
+// Android currently uses the intentionally small direct-JNI ABI in lib.rs so
+// the app can compile without a host-side bindgen step.
+namespace nextgen_editor {
+  string create_document();
+  string apply_edit(string document_id, string edit_json);
+  string snapshot(string document_id);
+  void close_document(string document_id);
+};
