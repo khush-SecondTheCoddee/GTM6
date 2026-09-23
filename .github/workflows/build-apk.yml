@@ -29,10 +29,15 @@ jobs:
           targets: aarch64-linux-android,armv7-linux-androideabi,x86_64-linux-android
       - name: Install cargo-ndk
         run: cargo install cargo-ndk --version 3.5.4 --locked
-      - name: Set up Android SDK and NDK
-        uses: android-actions/setup-android@v3
-      - name: Install Android NDK 26
-        run: sdkmanager "platforms;android-35" "build-tools;35.0.0" "ndk;26.3.11579264"
+      # ubuntu-latest already supplies cmdline-tools and ANDROID_HOME.  Do not
+      # use android-actions/setup-android here: it tries to install the removed
+      # legacy `tools` SDK package and fails with current Google repositories.
+      - name: Install Android platform and NDK 26
+        env:
+          ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
+        run: |
+          yes | sdkmanager --licenses > /dev/null || true
+          sdkmanager --install "platform-tools" "platforms;android-35" "build-tools;35.0.0" "ndk;26.3.11579264"
       - name: Cross-compile Rust engine
         env:
           ANDROID_NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/26.3.11579264
