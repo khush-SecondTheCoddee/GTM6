@@ -17,9 +17,17 @@ android {
         versionName = "0.1.0"
         ndk { abiFilters += setOf("arm64-v8a", "armeabi-v7a", "x86_64") }
     }
+    // Kotlin 2 validates its target against javac. Keep both compilers on the
+    // JDK required by AGP and configured in CI.
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
     buildFeatures { compose = true; buildConfig = true }
     packaging { jniLibs { useLegacyPackaging = false } }
 }
+
+kotlin { jvmToolchain(17) }
 
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
