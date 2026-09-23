@@ -12,6 +12,11 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # Do not derive this from env.ANDROID_HOME: runner environment variables are
+    # not available as GitHub expression-context `env` values. A workspace SDK
+    # is writable and makes the SDK/NDK paths deterministic for all steps.
+    env:
+      ANDROID_SDK_ROOT: ${{ github.workspace }}/.android-sdk
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -30,11 +35,9 @@ jobs:
       - name: Install cargo-ndk
         run: cargo install cargo-ndk --version 3.5.4 --locked
       # Do not use android-actions/setup-android: it tries to install Google's
-      # removed legacy `tools` package. ubuntu-latest has ANDROID_HOME, but does
-      # not guarantee sdkmanager is preinstalled, so bootstrap cmdline-tools.
+      # removed legacy `tools` package. Bootstrap a workspace-local SDK instead
+      # of relying on the runner's optional ANDROID_HOME installation.
       - name: Install Android command-line tools, platform, and NDK 26
-        env:
-          ANDROID_SDK_ROOT: ${{ env.ANDROID_HOME }}
         run: |
           readonly CMDLINE_TOOLS_DIR="$ANDROID_SDK_ROOT/cmdline-tools"
           readonly SDKMANAGER="$CMDLINE_TOOLS_DIR/latest/bin/sdkmanager"
@@ -49,9 +52,10 @@ jobs:
           yes | "$SDKMANAGER" --sdk_root="$ANDROID_SDK_ROOT" --licenses > /dev/null
           "$SDKMANAGER" --sdk_root="$ANDROID_SDK_ROOT" --install \
             "platform-tools" "platforms;android-35" "build-tools;35.0.0" "ndk;26.3.11579264"
+          printf 'sdk.dir=%s\n' "$ANDROID_SDK_ROOT" > local.properties
       - name: Cross-compile Rust engine
         env:
-          ANDROID_NDK_HOME: ${{ env.ANDROID_HOME }}/ndk/26.3.11579264
+          ANDROID_NDK_HOME: ${{ github.workspace }}/.android-sdk/ndk/26.3.11579264
         run: |
           rm -rf app/src/main/jniLibs
           cargo ndk --manifest-path core-engine/Cargo.toml --platform 26 --target arm64-v8a --target armeabi-v7a --target x86_64 --output-dir app/src/main/jniLibs build --release
