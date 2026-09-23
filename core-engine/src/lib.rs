@@ -239,7 +239,7 @@ pub extern "system" fn Java_com_nextgen_editor_NativeBridge_nativeSnapshot(
 
 #[no_mangle]
 pub extern "system" fn Java_com_nextgen_editor_NativeBridge_nativeCloseDocument(
-    env: JNIEnv,
+    mut env: JNIEnv,
     _: JClass,
     id: JString,
 ) {
